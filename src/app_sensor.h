@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2023
+ * Regis Rousseau
+ * Univ Lyon, INSA Lyon, Inria, CITI, EA3720
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#ifndef APP_SENSOR_H
+#define APP_SENSOR_H
+
+#include <inttypes.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#include <zephyr/kernel.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
+#include <zephyr/drivers/adc.h>
+
+#define DT_SPEC_AND_COMMA(node_id, prop, idx) \
+	ADC_DT_SPEC_GET_BY_IDX(node_id, idx),
+
+//#define LOOP_DELAY K_MSEC(60000)
+
+int app_sensor_init(void);
+uint16_t app_sensor_read(void);
+
+#endif /* APP_SENSOR_H */
+
