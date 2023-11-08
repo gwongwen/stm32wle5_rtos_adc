@@ -21,17 +21,18 @@ int8_t app_bme280_init(const struct device *dev)
 		return 0;
 	}
 
+    printk("found device \"%s\", getting bme280 data\n", dev->name);
     return 0;
 }
 
 int8_t app_bme280_handler(const struct device *dev)
 {
     static struct nvs_fs fs;
-    struct sensor_value temp_raw;
-    double temp;
-    struct sensor_value hum_raw;
-    double hum;
+    struct sensor_value temp;
+    struct sensor_value hum;
     int8_t ret = 0;
+
+    dev = DEVICE_DT_GET_ANY(bosch_bme280);
 
 	ret = sensor_sample_fetch(dev);
     if (ret < 0 && ret != -EBADMSG) { 
@@ -39,23 +40,21 @@ int8_t app_bme280_handler(const struct device *dev)
 	    return 0;
     }
 
-	ret = sensor_channel_get(dev, SENSOR_CHAN_AMBIENT_TEMP, &temp_raw);
+	ret = sensor_channel_get(dev, SENSOR_CHAN_AMBIENT_TEMP, &temp);
     if (ret < 0) {
         printk("can't read sensor channels. error: %d\n", ret);
 	    return 0;
     }
-    temp = sensor_value_to_double(&temp_raw);
-    nvs_write(&fs, BME280_TEMP_ID, &temp_raw, sizeof(temp_raw));
+    //nvs_write(&fs, BME280_TEMP_ID, &temp_raw, sizeof(temp_raw));
 
-	ret = sensor_channel_get(dev, SENSOR_CHAN_HUMIDITY, &hum_raw);
+	ret = sensor_channel_get(dev, SENSOR_CHAN_HUMIDITY, &hum);
     if (ret < 0) {
         printk("can't read sensor channels. error: %d\n");
 	    return 0;
     }
-    hum = sensor_value_to_double(&hum_raw);
-    nvs_write(&fs, BME280_HUM_ID, &hum_raw, sizeof(hum_raw));
-    
-    printk("temp: %f; humidity: %f\n", temp, hum);
+
+    //nvs_write(&fs, BME280_HUM_ID, &hum_raw, sizeof(hum_raw));
+    printk("temp: %d.%03d; press: %d.%03d\n",temp.val1, temp.val2, hum.val1, hum.val2);
 
     return 0;
 }

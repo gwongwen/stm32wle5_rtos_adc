@@ -31,21 +31,11 @@ int app_nvs_init(struct nvs_fs *fs)
 		return -EINVAL;
 	}
 
-	fs->sector_count = 3U;
+	fs->sector_count = 2U;
 
 	ret = nvs_mount(fs);
 	if (ret) {
 		printk("flash init failed. error: %d\n", ret);
 		return 0;
 	}
-
-#ifdef NVS_CLEAR
-	ret = nvs_clear(fs);
-	if (ret) {
-		printk("flash clear failed. error: %d\n", ret);
-		return;
-	} else {
-		printk("cleared NVS from flash\n");
-	}
-#endif
 }

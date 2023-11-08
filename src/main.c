@@ -17,14 +17,14 @@
 
 void rtc_work_handler(struct k_work *work_rtc)
 {
-	const struct device *bme280_dev = NULL;
+	//const struct device *bme280_dev = NULL;
 	const struct device *bat_dev = NULL;
-	const struct device *timer_rtc_dev = NULL;
+	//const struct device *timer_rtc_dev = NULL;
 
 	printk("handler called\n");
 
-	app_rtc_stm32_handler(timer_rtc_dev);
-	app_bme280_handler(bme280_dev);
+	//app_rtc_stm32_handler(timer_rtc_dev);
+	//app_bme280_handler(bme280_dev);
 	app_stm32_vbat_handler(bat_dev);
 }
 
@@ -73,27 +73,16 @@ int main(void)
 	const struct device *bat_dev = NULL;
 	const struct device *timer_rtc_dev = NULL;
 
-	printk("beginninig of initialization\n");
-
-	app_bme280_init(bme280_dev);
-	printk("bme280 ready\n");
-
+	//app_bme280_init(bme280_dev);
 	app_stm32_vbat_init(bat_dev);
-	printk("bat ready\n");
-
-	app_rtc_stm32_init(timer_rtc_dev);
-	printk("timer ready\n");
-
-	app_nvs_init(&fs);
-	printk("memory ready\n");
-
-	app_sensor_init();
-	printk("geophone ready\n");
+	//app_rtc_stm32_init(timer_rtc_dev);
+	//app_nvs_init(&fs);
+	//app_sensor_init();
 
 	printk("beginninig of test\n");
+	app_stm32_vbat_handler(bat_dev);
 	//k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
 	
-	k_timer_start(&rtc_timer, K_MINUTES(1), K_MINUTES(1));
-	
+	//k_timer_start(&rtc_timer, K_MINUTES(1), K_MINUTES(1));
 	return 0;
 }
