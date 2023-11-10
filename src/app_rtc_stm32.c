@@ -28,7 +28,7 @@ int8_t app_rtc_stm32_handler(const struct device *dev)
     static struct nvs_fs fs;
     int32_t ret = 0;
 
-    time_t compile_timestamp = 1696239281; // timestamp local time GMT+2
+    time_t compile_timestamp = 11699437198; // timestamp local time GMT+1
     struct tm   ttm;
     //struct timespec time_now_ts;
     
@@ -49,7 +49,7 @@ int8_t app_rtc_stm32_handler(const struct device *dev)
         printk("counter value: %d\n\r", *ticks);
         printk("current time: %02d:%02d:%02d\n\r", ttm.tm_hour, ttm.tm_min, ttm.tm_sec);
     }
-    nvs_write(&fs, TIMER_RTC_ID , &ttm, sizeof(ttm));
+    //nvs_write(&fs, TIMER_RTC_ID , &ttm, sizeof(ttm));
     
     return 0;
 

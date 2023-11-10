@@ -11,19 +11,21 @@
 #include <inttypes.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/adc.h>
 
-#define DT_SPEC_AND_COMMA(node_id, prop, idx) \
-	ADC_DT_SPEC_GET_BY_IDX(node_id, idx),
+#define ADC_RESOLUTION		    12
+#define ADC_GAIN			    ADC_GAIN_1
+#define ADC_REFERENCE		    ADC_REF_INTERNAL
+#define ADC_ACQUISITION_TIME	ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 5)
+#define BUFFER_SIZE			    6
 
 //#define LOOP_DELAY K_MSEC(60000)
-
-int app_sensor_init(void);
-uint16_t app_sensor_read(void);
+uint16_t app_adc_stm32_handler();
 
 #endif /* APP_SENSOR_H */
 

@@ -45,7 +45,7 @@ int8_t app_bme280_handler(const struct device *dev)
         printk("can't read sensor channels. error: %d\n", ret);
 	    return 0;
     }
-    //nvs_write(&fs, BME280_TEMP_ID, &temp_raw, sizeof(temp_raw));
+    nvs_write(&fs, BME280_TEMP_ID, &temp, sizeof(temp));
 
 	ret = sensor_channel_get(dev, SENSOR_CHAN_HUMIDITY, &hum);
     if (ret < 0) {
@@ -53,7 +53,7 @@ int8_t app_bme280_handler(const struct device *dev)
 	    return 0;
     }
 
-    //nvs_write(&fs, BME280_HUM_ID, &hum_raw, sizeof(hum_raw));
+    nvs_write(&fs, BME280_HUM_ID, &hum, sizeof(hum));
     printk("temp: %d.%03d; press: %d.%03d\n",temp.val1, temp.val2, hum.val1, hum.val2);
 
     return 0;

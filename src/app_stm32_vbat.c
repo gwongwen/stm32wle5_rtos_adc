@@ -45,7 +45,7 @@ int8_t app_stm32_vbat_handler(const struct device *dev)
 	    return 0;
     }
 
-    //nvs_write(&fs, STM32_VBAT_ID, &bat_raw, sizeof(bat_raw));
+    nvs_write(&fs, STM32_VBAT_ID, &bat, sizeof(bat));
     printk("stm32 vbat: %d.%03d\n", bat.val1, bat.val2);
 
     return 0;
