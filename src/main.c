@@ -42,6 +42,7 @@ void adc_work_handler(struct k_work *work_adc)
 	int8_t ret;
 	uint16_t raw_val;
 	uint8_t payload[2];
+	float voltage;
 	static struct nvs_fs *fs;
 
 	printk("ADC handler called\n");
@@ -49,8 +50,9 @@ void adc_work_handler(struct k_work *work_adc)
 	raw_val = app_adc_handler();
 	payload[0] = raw_val >> 8;
 	payload[1] = raw_val;
+	voltage = (raw_val/4096)*ADC_REF_VDD_1;
 
-	printk("value uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
+	printk("value uint16: %d, MSB payload: %d, LSB payload: %d, voltage: %d\n", raw_val, payload[0], payload[1], voltage);
 }
 
 K_WORK_DEFINE(adc_work, adc_work_handler);
