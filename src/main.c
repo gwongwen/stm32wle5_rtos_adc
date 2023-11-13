@@ -39,22 +39,18 @@ K_TIMER_DEFINE(rtc_timer, rtc_timer_handler, NULL);
 
 void adc_work_handler(struct k_work *work_adc)
 {
-	int32_t ret;
-
+	int8_t ret;
+	uint16_t raw_val;
+	uint8_t payload[2];
 	static struct nvs_fs *fs;
-
-	int32_t gsone_val;
-    int32_t payload[2];
 
 	printk("ADC handler called\n");
 
-	gsone_val = app_adc_handler();
+	raw_val = app_adc_handler();
+	payload[0] = raw_val >> 8;
+	payload[1] = raw_val;
 
-    payload[1] = gsone_val >> 8;
-    payload[2] = gsone_val;
-
-	printk("value int32: %d\n", gsone_val);
-	printk("payload int32: %d\n", payload);
+	printk("value uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
 }
 
 K_WORK_DEFINE(adc_work, adc_work_handler);
@@ -81,7 +77,7 @@ int main(void)
 	
 	printk("beginninig of test\n");
 
-	k_timer_start(&adc_timer, K_MSEC(5), K_MSEC(5));
+	k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
 	k_timer_start(&rtc_timer, K_MINUTES(30), K_MINUTES(30));
 
 	return 0;

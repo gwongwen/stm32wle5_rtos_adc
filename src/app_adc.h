@@ -20,10 +20,10 @@
 
 #define ADC_RESOLUTION		    12
 #define ADC_GAIN			    ADC_GAIN_1
-#define ADC_REFERENCE		    ADC_REF_INTERNAL
+#define ADC_REFERENCE		    ADC_REF_VDD_1
 #define ADC_ACQUISITION_TIME	ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 5000)
-#define BUFFER_SIZE			    6
+#define BUFFER_SIZE			    2       // in bytes -> reso 12 bits 
 
-int32_t app_adc_handler();
+uint16_t app_adc_handler();
 
 #endif /* APP_SENSOR_H */
