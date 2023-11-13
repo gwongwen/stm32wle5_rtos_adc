@@ -25,6 +25,6 @@
 #define BUFFER_SIZE			    6
 
 //#define LOOP_DELAY K_MSEC(60000)
-uint16_t app_adc_handler();
+int32_t app_adc_handler();
 
 #endif /* APP_SENSOR_H */

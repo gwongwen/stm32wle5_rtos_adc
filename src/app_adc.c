@@ -47,10 +47,10 @@ static const struct device* app_adc_init(void) {
 	    return adc_dev;
 }
 	
-uint16_t app_adc_handler(void) {
+int32_t app_adc_handler(void) {
 
 	int err;
-	uint16_t samp_val;
+	int32_t samp_val;
 
 	const struct device *adc_dev = app_adc_init();
 	if (adc_dev) {
