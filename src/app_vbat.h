@@ -13,7 +13,7 @@
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/logging/log.h>
 
-int8_t app_stm32_vbat_init(const struct device *dev);
-int8_t app_stm32_vbat_handler(const struct device *dev);
+int8_t app_vbat_init(const struct device *dev);
+int8_t app_vbat_handler(const struct device *dev);
 
 #endif /* APP_STM32_VBAT_H */

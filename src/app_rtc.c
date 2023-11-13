@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "app_rtc_stm32.h"
+#include "app_rtc.h"
 #include "app_nvs.h"
 
-int8_t app_rtc_stm32_init(const struct device *dev)
+int8_t app_rtc_init(const struct device *dev)
 {
     dev = DEVICE_DT_GET(TIMER);   // get sensor device
 
@@ -23,7 +23,7 @@ int8_t app_rtc_stm32_init(const struct device *dev)
     return 0;
 }
 
-int8_t app_rtc_stm32_handler(const struct device *dev)
+int8_t app_rtc_handler(const struct device *dev)
 {
     static struct nvs_fs fs;
     int32_t ret = 0;

@@ -21,7 +21,7 @@
 /* 1000 msec = 1 sec */
 #define SLEEP_TIME_MS   10000
 
-int8_t app_rtc_stm32_init(const struct device *dev);
-int8_t app_rtc_stm32_handler(const struct device *dev);
+int8_t app_rtc_init(const struct device *dev);
+int8_t app_rtc_handler(const struct device *dev);
 
 #endif /* APP_RTC_STM32_H_ */

@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "app_stm32_vbat.h"
+#include "app_vbat.h"
 #include "app_nvs.h"
 
-int8_t app_stm32_vbat_init(const struct device *dev)
+int8_t app_vbat_init(const struct device *dev)
 {
     dev = DEVICE_DT_GET_ONE(st_stm32_vbat);
     if (dev == NULL) {
@@ -25,7 +25,7 @@ int8_t app_stm32_vbat_init(const struct device *dev)
     return 0;
 }
 
-int8_t app_stm32_vbat_handler(const struct device *dev)
+int8_t app_vbat_handler(const struct device *dev)
 {
     static struct nvs_fs fs;
     struct sensor_value bat;

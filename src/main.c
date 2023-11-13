@@ -11,9 +11,9 @@
 
 #include "app_bme280.h"
 #include "app_nvs.h"
-#include "app_rtc_stm32.h"
-#include "app_sensor.h"
-#include "app_stm32_vbat.h"
+#include "app_rtc.h"
+#include "app_adc.h"
+#include "app_vbat.h"
 
 void rtc_work_handler(struct k_work *work_rtc)
 {
@@ -23,9 +23,9 @@ void rtc_work_handler(struct k_work *work_rtc)
 
 	printk("RTC handler called\n");
 
-	app_rtc_stm32_handler(timer_rtc_dev);
+	app_rtc_handler(timer_rtc_dev);
 	app_bme280_handler(bme280_dev);
-	app_stm32_vbat_handler(bat_dev);
+	app_vbat_handler(bat_dev);
 }
 
 K_WORK_DEFINE(rtc_work, rtc_work_handler);
@@ -48,7 +48,7 @@ void adc_work_handler(struct k_work *work_adc)
 
 	printk("ADC handler called\n");
 
-	gsone_val = app_adc_stm32_handler();
+	gsone_val = app_adc_handler();
 
     payload[1] = gsone_val >> 8;
     payload[2] = gsone_val;
@@ -75,13 +75,23 @@ int main(void)
 
 	app_bme280_init(bme280_dev);
 	app_nvs_init(&fs);
-	app_rtc_stm32_init(timer_rtc_dev);
-	app_stm32_vbat_init(bat_dev);
+	app_rtc_init(timer_rtc_dev);
+	app_vbat_init(bat_dev);
 	
 	printk("beginninig of test\n");
 
-	k_timer_start(&adc_timer, K_MSEC(5), K_MSEC(5));
-	k_timer_start(&rtc_timer, K_MINUTES(30), K_MINUTES(30));
+	//k_timer_start(&adc_timer, K_MSEC(5), K_MSEC(5));
+	//k_timer_start(&rtc_timer, K_MINUTES(30), K_MINUTES(30));
+
+	uint16_t gsone_val;
+    uint16_t payload[2];
+
+	gsone_val = app_adc_handler();
+
+    payload[1] = gsone_val >> 8;
+    payload[2] = gsone_val;
+
+	printk("payload: %d\n", gsone_val);
 
 	return 0;
 }

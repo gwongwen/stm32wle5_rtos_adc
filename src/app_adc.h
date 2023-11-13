@@ -21,11 +21,10 @@
 #define ADC_RESOLUTION		    12
 #define ADC_GAIN			    ADC_GAIN_1
 #define ADC_REFERENCE		    ADC_REF_INTERNAL
-#define ADC_ACQUISITION_TIME	ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 5)
+#define ADC_ACQUISITION_TIME	ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 5000)
 #define BUFFER_SIZE			    6
 
 //#define LOOP_DELAY K_MSEC(60000)
-uint16_t app_adc_stm32_handler();
+uint16_t app_adc_handler();
 
 #endif /* APP_SENSOR_H */
-
