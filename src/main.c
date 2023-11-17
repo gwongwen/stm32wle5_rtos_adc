@@ -8,6 +8,7 @@
 #include <zephyr/device.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
+#include <stdio.h>
 
 #include "app_bme280.h"
 #include "app_nvs.h"
@@ -39,20 +40,15 @@ K_TIMER_DEFINE(rtc_timer, rtc_timer_handler, NULL);
 
 void adc_work_handler(struct k_work *work_adc)
 {
-	int8_t ret;
-	uint16_t raw_val;
+	uint16_t raw_val = app_adc_handler();
 	uint8_t payload[2];
-	float voltage;
-	static struct nvs_fs *fs;
 
 	printk("ADC handler called\n");
-
-	raw_val = app_adc_handler();
+	
 	payload[0] = raw_val >> 8;
 	payload[1] = raw_val;
-	voltage = (raw_val/4096)*ADC_REF_VDD_1;
-
-	printk("value uint16: %d, MSB payload: %d, LSB payload: %d, voltage: %d\n", raw_val, payload[0], payload[1], voltage);
+	
+	printk("value uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
 }
 
 K_WORK_DEFINE(adc_work, adc_work_handler);
@@ -70,17 +66,19 @@ int main(void)
 	const struct device *bme280_dev = NULL;
 	const struct device *bat_dev = NULL;
 	const struct device *timer_rtc_dev = NULL;
-	uint16_t value;
+	uint16_t test;
 
 	app_bme280_init(bme280_dev);
 	app_nvs_init(&fs);
 	app_rtc_init(timer_rtc_dev);
 	app_vbat_init(bat_dev);
-	
+
 	printk("beginninig of test\n");
 
-	k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
-	k_timer_start(&rtc_timer, K_MINUTES(30), K_MINUTES(30));
+	//k_timer_start(&rtc_timer, K_MSEC(10000), K_MSEC(10000));
+	//k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
+
+	test = app_adc_handler();
 
 	return 0;
 }

@@ -7,57 +7,43 @@
 
 #include "app_adc.h"
 
-uint16_t samp_buf[BUFFER_SIZE];
+uint16_t m_sp_buf;
 
-/* data of ADC io-channels specified in devicetree. */
-static const struct adc_channel_cfg adc_chan0_cfg = {
-	.channel_id       = 0, // gets set during init
-	.gain             = ADC_GAIN,
-	.reference        = ADC_REFERENCE,
-	.acquisition_time = ADC_ACQUISITION_TIME,
-	.differential	  = 0,
+static const struct adc_dt_spec adc_channels[] = {
+	DT_FOREACH_PROP_ELEM(DT_PATH(zephyr_user), io_channels, DT_SPEC_AND_COMMA)
 };
 
-struct adc_sequence sequence = {
-		.options     = NULL,				// extra samples and callback
-		.channels    = BIT(0),				// bit mask of channels to read
-		.buffer = &samp_buf,
-		.buffer_size = BUFFER_SIZE,			// buffer size in bytes, not number of samples
-		.resolution  = ADC_RESOLUTION,		// desired resolution
-		.oversampling = 0,					// don't oversample
-		.calibrate = 0						// don't calibrate
-	};
+struct adc_sequence adc_ch13_seq = {
+	.buffer 		= &m_sp_buf,
+	.buffer_size	= sizeof(m_sp_buf),
+};
 
-static const struct device* app_adc_init(void) {
-
-    	int ret;
-
-        const struct device *adc_dev = device_get_binding(DT_NODE_HAS_PROP(DT_PATH(zephyr_user), io_channels));
-		if (adc_dev!= NULL) {
-
-            ret = adc_channel_setup(adc_dev, &adc_chan0_cfg);
-			if(ret != 0) {
-			    adc_dev = NULL;
-		    }
-        }
-
-        //memset(samp_buf, 0, sizeof(samp_buf));
-	    return adc_dev;
-}
-	
 uint16_t app_adc_handler(void) {
 
-	int err;
-	uint16_t samp_val;
+	int8_t err;
+	int32_t val_mv;
 
-	const struct device *adc_dev = app_adc_init();
-	if (adc_dev) {
+	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
+		if (!device_is_ready(adc_channels[i].dev)) {
+			printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
+		return 0;
+		}
 
-		err = adc_read(adc_dev, &sequence);
-		if (err ==0){
-			samp_val = samp_buf;
+		err = adc_channel_setup_dt(&adc_channels[i]);
+		if (err < 0) {
+			printk("Could not setup channel 13. error: %d\n", err);
+			return 0;
 		}
 	}
 
-	return samp_val;
-} 
+	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
+		(void)adc_sequence_init_dt(&adc_channels[i], &adc_ch13_seq);
+		err = adc_read(adc_channels[i].dev, &adc_ch13_seq);
+		val_mv = (int32_t)m_sp_buf;
+		printk("%"PRId32, val_mv);
+
+		err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
+		printk(" = %"PRId32" mV\n", val_mv);
+	}
+	return m_sp_buf;
+}
