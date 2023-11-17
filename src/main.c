@@ -4,6 +4,7 @@
  * Univ Lyon, INSA Lyon, Inria, CITI, EA3720
  * SPDX-License-Identifier: Apache-2.0
  */
+ 
 
 #include <zephyr/device.h>
 #include <zephyr/kernel.h>
