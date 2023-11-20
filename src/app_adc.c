@@ -37,6 +37,11 @@ uint16_t app_adc_handler(void) {
 	}
 
 	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
+
+		printk("- %s, channel %d: ",
+			       adc_channels[i].dev->name,
+			       adc_channels[i].channel_id);
+
 		(void)adc_sequence_init_dt(&adc_channels[i], &adc_ch13_seq);
 		err = adc_read(adc_channels[i].dev, &adc_ch13_seq);
 		val_mv = (int32_t)m_sp_buf;
