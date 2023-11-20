@@ -76,8 +76,8 @@ int main(void)
 
 	printk("beginninig of test\n");
 
-	//k_timer_start(&rtc_timer, K_MSEC(10000), K_MSEC(10000));
-	//k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
+	k_timer_start(&rtc_timer, K_MSEC(10000), K_MSEC(10000));
+	k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
 
 	test = app_adc_handler();
 
