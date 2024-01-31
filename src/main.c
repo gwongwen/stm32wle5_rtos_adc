@@ -14,9 +14,10 @@
 #include "app_rom.h"
 #include "app_rtc.h"
 
-/*void adc_work_handler(struct k_work *work_adc)
+void adc_work_handler(struct k_work *work_adc)
 {
 	const struct device *rtc_dev = NULL;
+	const struct device *rom_dev = NULL;
 
 	uint16_t raw_val = app_adc_handler();
 	uint8_t payload[2];
@@ -38,18 +39,18 @@ void adc_timer_handler(struct k_timer *adc_dum)
 }
 
 K_TIMER_DEFINE(adc_timer, adc_timer_handler, NULL);
-*/
+
 int main(void)
 {
 	const struct device *rtc_dev = NULL;
 	const struct device *rom_dev = NULL;
 
 	app_rtc_init(rtc_dev);
-	app_rom_init(rom_dev)
+	app_rom_init(rom_dev);
 
 	printk("beginninig of test\n");
 
-//	k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
+	k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
 
 	return 0;
 }

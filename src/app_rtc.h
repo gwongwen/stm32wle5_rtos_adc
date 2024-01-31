@@ -4,8 +4,8 @@
  * Univ Lyon, INSA Lyon, Inria, CITI, EA3720
  * SPDX-License-Identifier: Apache-2.0
  */
-#ifndef APP_RTC_STM32_H_
-#define APP_RTC_STM32_H_
+#ifndef APP_RTC_H_
+#define APP_RTC_H_
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
@@ -24,4 +24,4 @@
 int8_t app_rtc_init(const struct device *dev);
 int8_t app_rtc_handler(const struct device *dev);
 
-#endif /* APP_RTC_STM32_H_ */
+#endif /* APP_RTC_H_ */

@@ -15,4 +15,6 @@
 
 int8_t app_rom_init(const struct device *dev);
 
+#define EEPROM_SAMPLE_OFFSET        0
+
 #endif /* APP_ROM_H_ */
