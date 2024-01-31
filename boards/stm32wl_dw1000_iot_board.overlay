@@ -13,13 +13,12 @@
 / {
 	zephyr,user {
 		io-channels = <&adc1 13 >;
-		io-channels-names = "SENSOR";
 	};
 
 	aliases {
 		rtc = &rtc;
 	};
-}
+};
 
 &adc1 {
 	#address-cells = <1>;

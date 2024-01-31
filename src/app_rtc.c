@@ -6,7 +6,6 @@
  */
 
 #include "app_rtc.h"
-#include "app_nvs.h"
 
 int8_t app_rtc_init(const struct device *dev)
 {
@@ -25,7 +24,6 @@ int8_t app_rtc_init(const struct device *dev)
 
 int8_t app_rtc_handler(const struct device *dev)
 {
-    static struct nvs_fs fs;
     int32_t ret = 0;
 
     time_t compile_timestamp = 11699437198; // timestamp local time GMT+1
