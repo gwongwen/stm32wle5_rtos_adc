@@ -20,3 +20,19 @@
 		return 0;
 	}
 }
+
+int8_t app_rom_write(const struct device *dev, uint16_t data)
+{
+	int8_t ret;
+	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
+
+	if (dev == NULL)
+	{
+		return 0;
+	}
+	ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET, &data, sizeof(data));
+	if (ret  < 0){
+		printk("couldn't write eeprom. error: %d\n", ret);
+	}
+	return 0;
+}

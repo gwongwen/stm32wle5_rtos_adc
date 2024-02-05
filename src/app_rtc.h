@@ -9,12 +9,9 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
-#include <zephyr/logging/log.h>
-#include <zephyr/types.h>
-#include <zephyr/posix/time.h>
 #include <zephyr/drivers/counter.h>
-
-#include <string.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/posix/time.h>
 
 #define TIMER DT_INST(0, st_stm32_rtc)
 

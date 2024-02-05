@@ -48,7 +48,6 @@ int8_t app_rtc_handler(const struct device *dev)
         printk("current time: %02d:%02d:%02d\n\r", ttm.tm_hour, ttm.tm_min, ttm.tm_sec);
     }    
     return 0;
-
 }
 
 

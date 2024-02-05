@@ -13,8 +13,9 @@
 #include <zephyr/drivers/eeprom.h>
 #include <zephyr/logging/log.h>
 
-int8_t app_rom_init(const struct device *dev);
-
 #define EEPROM_SAMPLE_OFFSET        0
+
+int8_t app_rom_init(const struct device *dev);
+int8_t app_rom_write(const struct device *dev, uint16_t data);
 
 #endif /* APP_ROM_H_ */

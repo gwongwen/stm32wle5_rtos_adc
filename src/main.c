@@ -21,13 +21,15 @@ void adc_work_handler(struct k_work *work_adc)
 
 	uint16_t raw_val = app_adc_handler();
 	uint8_t payload[2];
+	int8_t ret;
 
 	printk("ADC handler called\n");
 
 	app_rtc_handler(rtc_dev);
 	payload[0] = raw_val >> 8;
 	payload[1] = raw_val;
-	
+
+	ret = app_rom_write(rom_dev, raw_val);
 	printk("value uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
 }
 
@@ -50,7 +52,8 @@ int main(void)
 
 	printk("beginninig of test\n");
 
-	k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
+	int8_t ret = app_rtc_handler(rtc_dev);
+//	k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
 
 	return 0;
 }
