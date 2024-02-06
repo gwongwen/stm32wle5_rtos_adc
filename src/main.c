@@ -8,8 +8,6 @@
 
 #include <zephyr/device.h>
 #include <zephyr/kernel.h>
-#include <zephyr/logging/log.h>
-#include <stdio.h>
 
 #include "app_rom.h"
 
