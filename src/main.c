@@ -14,7 +14,6 @@
 void adc_work_handler(struct k_work *work_adc)
 {
 	const struct device *rom_dev = NULL;
-	printk("toto");
 	uint16_t raw_val = app_adc_handler();
 	uint8_t payload[2];
 	int8_t ret;
@@ -29,27 +28,24 @@ void adc_work_handler(struct k_work *work_adc)
 
 	raw_val = app_rom_read(rom_dev);
 	printk("value read uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
-
 }
-
 K_WORK_DEFINE(adc_work, adc_work_handler);
 
 void adc_timer_handler(struct k_timer *adc_dum)
 {
-    k_work_submit(&adc_work);
+    printk("ADC timer called\n");
+	k_work_submit(&adc_work);
 }
-
 K_TIMER_DEFINE(adc_timer, adc_timer_handler, NULL);
 
-int main(void)
+int8_t main(void)
 {
 	const struct device *rom_dev = NULL;
-
 	app_rom_init(rom_dev);
 
-	printk("beginninig of test\n");
+	printk("ADC STM32 Example\nBoard: %s\n", CONFIG_BOARD);
 
-	k_timer_start(&adc_timer, K_MSEC(1000), K_MSEC(1000));
+	k_timer_start(&adc_timer, K_SECONDS(1), K_SECONDS(1));
 
 	return 0;
 }
