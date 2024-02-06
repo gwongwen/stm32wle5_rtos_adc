@@ -16,7 +16,7 @@
 void adc_work_handler(struct k_work *work_adc)
 {
 	const struct device *rom_dev = NULL;
-
+	printk("toto");
 	uint16_t raw_val = app_adc_handler();
 	uint8_t payload[2];
 	int8_t ret;
@@ -27,7 +27,11 @@ void adc_work_handler(struct k_work *work_adc)
 	payload[1] = raw_val;
 
 	ret = app_rom_write(rom_dev, raw_val);
-	printk("value uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
+	printk("value write uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
+
+	raw_val = app_rom_read(rom_dev);
+	printk("value read uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
+
 }
 
 K_WORK_DEFINE(adc_work, adc_work_handler);
@@ -47,7 +51,7 @@ int main(void)
 
 	printk("beginninig of test\n");
 
-	k_timer_start(&adc_timer, K_MSEC(5000), K_MSEC(5000));
+	k_timer_start(&adc_timer, K_MSEC(1000), K_MSEC(1000));
 
 	return 0;
 }

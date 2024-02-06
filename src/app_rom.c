@@ -27,13 +27,25 @@ int8_t app_rom_write(const struct device *dev, uint16_t data)
 
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
-	if (dev == NULL) {
-		return 0;
-	}
-
 	ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET, &data, sizeof(data));
 	if (ret  < 0){
 		printk("couldn't write eeprom. error: %d\n", ret);
 	}
 	return 0;
-} 
+}
+
+uint16_t app_rom_read(const struct device *dev) {
+
+	int8_t ret;
+	uint16_t data;
+
+	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
+
+	ret = eeprom_read(dev, EEPROM_SAMPLE_OFFSET, &data, sizeof(data));
+
+	if (ret  < 0){
+		printk("couldn't read eeprom. error: %d\n", ret);
+	}
+	return data;
+
+}

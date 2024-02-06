@@ -31,7 +31,7 @@ uint16_t app_adc_handler(void) {
 
 		err = adc_channel_setup_dt(&adc_channels[i]);
 		if (err < 0) {
-			printk("Could not setup channel 13. error: %d\n", err);
+			printk("could not setup channel 13. error: %d\n", err);
 			return 0;
 		}
 	}

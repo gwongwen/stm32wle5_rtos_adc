@@ -17,5 +17,6 @@
 
 int8_t app_rom_init(const struct device *dev);
 int8_t app_rom_write(const struct device *dev, uint16_t data);
+uint16_t app_rom_read(const struct device *dev);
 
 #endif /* APP_ROM_H_ */
