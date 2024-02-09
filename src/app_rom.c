@@ -7,9 +7,13 @@
 
  #include "app_rom.h"
 
+ int8_t rom_isr_rd_ind;		// index used by Interrupt Service Routine
+ int8_t rom_isr_wrt_ind;		// index used by Interrupt Service Routine
+
  int8_t app_rom_init(const struct device *dev)
  {
-    dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
+    size_t eeprom_size;
+	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
     if (dev = NULL) {
 		printk("no eeprom device found. error: %d\n", dev);
@@ -19,18 +23,29 @@
 		printk("eeprom is not ready. error: %d\n", dev);
 		return 0;
 	}
+
+	eeprom_size = eeprom_get_size(dev);
+	printk("eeprom size: %zu\n", eeprom_size);
+
+	rom_isr_rd_ind = 0;
+	rom_isr_wrt_ind = 0;
 	return 0;
 }
 
 int8_t app_rom_write(const struct device *dev, uint16_t data)
 {
 	int8_t ret;
+	uint8_t adc_val;
 
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
-	ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET, &data, sizeof(data));
-	if (ret  < 0){
-		printk("couldn't write eeprom. error: %d\n", ret);
+	if (rom_isr_wrt_ind < ADC_BUFFER_SYZE) {
+		ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET+rom_isr_wrt_ind, &data, sizeof(data));
+		if (ret  < 0){
+			printk("couldn't write eeprom. error: %d\n", ret);
+		}
+	} else {
+		rom_isr_wrt_ind =0 ;
 	}
 	return 0;
 }
@@ -42,9 +57,13 @@ uint16_t app_rom_read(const struct device *dev)
 
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
-	ret = eeprom_read(dev, EEPROM_SAMPLE_OFFSET, &data, sizeof(data));
-	if (ret  < 0){
-		printk("couldn't read eeprom. error: %d\n", ret);
+	if (rom_isr_rd_ind < ADC_BUFFER_SYZE) {
+		ret = eeprom_read(dev, EEPROM_SAMPLE_OFFSET+rom_isr_rd_ind , &data, sizeof(data));
+		if (ret  < 0){
+			printk("couldn't read eeprom. error: %d\n", ret);
+		}
+	} else {
+		rom_isr_rd_ind = 0;
 	}
 	return data;
 }

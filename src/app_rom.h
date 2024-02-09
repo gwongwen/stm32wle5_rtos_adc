@@ -13,6 +13,8 @@
 #include <zephyr/drivers/eeprom.h>
 
 #define EEPROM_SAMPLE_OFFSET        0
+#define ADC_BUFFER_SYZE             10    // 10 samples for this test
+                                            
 
 int8_t app_rom_init(const struct device *dev);
 int8_t app_rom_write(const struct device *dev, uint16_t data);

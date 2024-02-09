@@ -7,7 +7,7 @@
 
 #include "app_adc.h"
 
-uint16_t m_sp_buf;
+uint16_t m_sp_buf;		
 
 static const struct adc_dt_spec adc_channels[] = {
 	DT_FOREACH_PROP_ELEM(DT_PATH(zephyr_user), io_channels, DT_SPEC_AND_COMMA)
