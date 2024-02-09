@@ -43,11 +43,9 @@ int8_t app_rom_write(const struct device *dev, uint16_t data)
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	if (rom_isr_wrt_ind < ADC_BUFFER_SYZE) {
-		for (int8_t i = 0, i < 2, i++) {
-			ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET+rom_isr_wrt_ind, &adc_val, sizeof(adc_val));
-			if (ret  < 0){
-				printk("couldn't write eeprom. error: %d\n", ret);
-			}
+		ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET+rom_isr_wrt_ind, &adc_val, sizeof(adc_val));
+		if (ret  < 0){
+			printk("couldn't write eeprom. error: %d\n", ret);
 		}
 	} else {
 		rom_isr_wrt_ind =0 ;
