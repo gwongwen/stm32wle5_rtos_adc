@@ -13,20 +13,20 @@
 void adc_work_handler(struct k_work *work_adc)
 {
 	const struct device *rom_dev = NULL;
-	uint16_t raw_val = app_adc_handler();
 	uint8_t payload[2];
 	int8_t ret;
+	uint16_t adc_val;
 
 	printk("ADC handler called\n");
 
-	payload[0] = raw_val >> 8;
-	payload[1] = raw_val;
+	payload[0] = adc_val >> 8;
+	payload[1] = adc_val;
 
-	ret = app_rom_write(rom_dev, raw_val);
-	printk("value write uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
+	ret = app_rom_write(rom_dev, adc_val);
+	printk("value write uint16: %d, MSB payload: %d, LSB payload: %d\n", adc_val, payload[0], payload[1]);
 
-	raw_val = app_rom_read(rom_dev);
-	printk("value read uint16: %d, MSB payload: %d, LSB payload: %d\n", raw_val, payload[0], payload[1]);
+	adc_val = app_rom_read(rom_dev);
+	printk("value read uint16: %d, MSB payload: %d, LSB payload: %d\n", adc_val, payload[0], payload[1]);
 }
 K_WORK_DEFINE(adc_work, adc_work_handler);
 

@@ -5,7 +5,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
- #include "app_rom.h"
+#include "app_rom.h"
+
+#define LORAWAN_DEV_EUI			{ 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x06, 0x21, 0xA5 }
+
+
+uint8_t dev_eui[] = LORAWAN_DEV_EUI;
+int32_t times = 12345;
+
+struct eeprom_data {
+	uint8_t id;
+	int32_t timestamp;
+	uint16_t val;
+};
 
  int8_t rom_isr_rd_ind;		// index used by Interrupt Service Routine
  int8_t rom_isr_wrt_ind;		// index used by Interrupt Service Routine
@@ -32,24 +44,25 @@
 	return 0;
 }
 
-int8_t app_rom_write(const struct device *dev, uint16_t data)
+int8_t app_rom_write(const struct device *dev, uint16_t adc_val_c)
 {
 	int8_t ret;
-	uint8_t adc_val[2];
+	struct eeprom_data data;
 
-	adc_val[0] = data >> 8;
-	adc_val[1] = data;
+	data.id = dev_eui;
+	data.timestamp = times;
+	data.val = adc_val_c;
 
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	if (rom_isr_wrt_ind < ADC_BUFFER_SYZE) {
-		ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET+rom_isr_wrt_ind, &adc_val, sizeof(adc_val));
+		ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET+(rom_isr_wrt_ind*136), &data, sizeof(data));
 		if (ret  < 0){
-			printk("couldn't write eeprom. error: %d\n", ret);
+				printk("couldn't write eeprom. error: %d\n", ret);
+			}
+		} else {
+			rom_isr_wrt_ind =0 ;
 		}
-	} else {
-		rom_isr_wrt_ind =0 ;
-	}
 	return 0;
 }
 
