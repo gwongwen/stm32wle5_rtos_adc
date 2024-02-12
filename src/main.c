@@ -10,6 +10,9 @@
 
 #include "app_rom.h"
 
+#include <zephyr/toolchain.h>
+#include <zephyr/kernel_structs.h>
+
 void adc_work_handler(struct k_work *work_adc)
 {
 	const struct device *rom_dev = NULL;
@@ -44,7 +47,11 @@ int8_t main(void)
 
 	printk("ADC STM32 Example\nBoard: %s\n", CONFIG_BOARD);
 
-	k_timer_start(&adc_timer, K_SECONDS(5), K_SECONDS(5));
+	uint32_t time = k_cycle_get_32();
+	printk("time stamp: %d", time);
+
+
+//	k_timer_start(&adc_timer, K_SECONDS(5), K_SECONDS(5));
 
 	return 0;
 }
