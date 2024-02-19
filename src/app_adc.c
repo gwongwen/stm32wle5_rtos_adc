@@ -19,7 +19,7 @@ struct adc_sequence adc_ch13_seq = {
 	.buffer_size	= sizeof(m_sp_buf),
 };
 
-//  ======== app_adc_handler ======================================
+//  ======== app_adc_handler ====================================
 uint16_t app_adc_handler(void) {
 
 	int8_t err;

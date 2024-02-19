@@ -7,12 +7,12 @@
  
 #include <zephyr/device.h>
 #include <zephyr/kernel.h>
-
-#include "app_rom.h"
-
 #include <zephyr/toolchain.h>
 #include <zephyr/kernel_structs.h>
 
+#include "app_rom.h"
+
+//  ======== interrupt sub-routine ===============================
 void adc_work_handler(struct k_work *work_adc)
 {
 	const struct device *rom_dev = NULL;
@@ -40,16 +40,15 @@ void adc_timer_handler(struct k_timer *adc_dum)
 }
 K_TIMER_DEFINE(adc_timer, adc_timer_handler, NULL);
 
+//  ======== main ===============================================
 int8_t main(void)
 {
 	const struct device *rom_dev = NULL;
+
+	// setup eeprom device
 	app_rom_init(rom_dev);
 
 	printk("ADC STM32 Example\nBoard: %s\n", CONFIG_BOARD);
-
-	uint32_t time = k_cycle_get_32();
-	printk("time stamp: %d", time);
-
 
 //	k_timer_start(&adc_timer, K_SECONDS(5), K_SECONDS(5));
 
