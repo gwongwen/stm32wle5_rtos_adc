@@ -9,7 +9,7 @@
 
 #define LORAWAN_DEV_EUI			{ 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x06, 0x21, 0xA5 }
 
-
+//  ======== globals ============================================
 uint8_t dev_eui[] = LORAWAN_DEV_EUI;
 int32_t times = 12345;
 
@@ -22,6 +22,7 @@ struct eeprom_data {
  int8_t rom_isr_rd_ind;		// index used by Interrupt Service Routine
  int8_t rom_isr_wrt_ind;		// index used by Interrupt Service Routine
 
+//  ======== app_rom_init =========================================
  int8_t app_rom_init(const struct device *dev)
  {
     size_t eeprom_size;
@@ -44,6 +45,7 @@ struct eeprom_data {
 	return 0;
 }
 
+//  ======== app_rom_write =========================================
 int8_t app_rom_write(const struct device *dev, uint16_t adc_val_c)
 {
 	int8_t ret;
@@ -66,6 +68,7 @@ int8_t app_rom_write(const struct device *dev, uint16_t adc_val_c)
 	return 0;
 }
 
+//  ======== app_rom_read ==========================================
 uint16_t app_rom_read(const struct device *dev)
 {
 	int8_t ret;

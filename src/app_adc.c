@@ -7,6 +7,7 @@
 
 #include "app_adc.h"
 
+//  ======== globals ============================================
 uint16_t m_sp_buf;		
 
 static const struct adc_dt_spec adc_channels[] = {
@@ -18,6 +19,7 @@ struct adc_sequence adc_ch13_seq = {
 	.buffer_size	= sizeof(m_sp_buf),
 };
 
+//  ======== app_adc_handler ======================================
 uint16_t app_adc_handler(void) {
 
 	int8_t err;
