@@ -26,6 +26,6 @@
 		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
 		zephyr,resolution = <12>;
 	};
-	vref-mv = <3000>;
+	vref-mv = <3300>;
 	status = "okay";
 };
