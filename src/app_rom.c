@@ -19,8 +19,8 @@ struct eeprom_data {
 	uint16_t val;
 };
 
- int8_t rom_isr_rd_ind;		// index used by Interrupt Service Routine
- int8_t rom_isr_wrt_ind;		// index used by Interrupt Service Routine
+int8_t rom_isr_rd_ind;		// index used by Interrupt Service Routine
+int8_t rom_isr_wrt_ind;	// index used by Interrupt Service Routine
 
 //  ======== app_rom_init =========================================
  int8_t app_rom_init(const struct device *dev)
@@ -45,7 +45,7 @@ struct eeprom_data {
 	return 0;
 }
 
-//  ======== app_rom_write =========================================
+//  ======== app_rom_write ========================================
 int8_t app_rom_write(const struct device *dev, uint16_t adc_val_c)
 {
 	int8_t ret;
@@ -68,7 +68,7 @@ int8_t app_rom_write(const struct device *dev, uint16_t adc_val_c)
 	return 0;
 }
 
-//  ======== app_rom_read ==========================================
+//  ======== app_rom_read =========================================
 uint16_t app_rom_read(const struct device *dev)
 {
 	int8_t ret;

@@ -7,9 +7,7 @@
  
 #include <zephyr/device.h>
 #include <zephyr/kernel.h>
-#include <zephyr/toolchain.h>
-#include <zephyr/kernel_structs.h>
-
+#include "app_adc.h"
 #include "app_rom.h"
 
 //  ======== interrupt sub-routine ===============================
