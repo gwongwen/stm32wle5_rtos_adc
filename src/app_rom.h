@@ -14,8 +14,9 @@
 #include <zephyr/drivers/eeprom.h>
 
 //  ======== defines ==============================================
-#define EEPROM_SAMPLE_OFFSET        0
-#define ADC_BUFFER_SYZE             10    // 10 samples for this test
+#define EEPROM_SAMPLE_OFFSET    0
+#define ADC_BUFFER_SYZE         10    // 10 samples for this test
+#define LORAWAN_DEV_EUI		    { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x06, 0x21, 0xA5 }
                                             
 //  ======== prototypes ===========================================
 int8_t app_rom_init(const struct device *dev);
