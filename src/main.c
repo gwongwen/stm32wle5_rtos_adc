@@ -11,32 +11,22 @@
 #include "app_rom.h"
 
 //  ======== interrupt sub-routine ===============================
-void adc_work_handler(struct k_work *work_adc)
+void geo_work_handler(struct k_work *work_geo)
 {
 	const struct device *rom_dev = NULL;
 	uint8_t payload[2];
-	int8_t ret;
-	uint16_t adc_val;
 
 	printk("ADC handler called\n");
-
-	payload[0] = adc_val >> 8;
-	payload[1] = adc_val;
-
-	ret = app_rom_write(rom_dev, adc_val);
-	printk("value write uint16: %d, MSB payload: %d, LSB payload: %d\n", adc_val, payload[0], payload[1]);
-
-	adc_val = app_rom_read(rom_dev);
-	printk("value read uint16: %d, MSB payload: %d, LSB payload: %d\n", adc_val, payload[0], payload[1]);
+	app_rom_handler(rom_dev);
 }
-K_WORK_DEFINE(adc_work, adc_work_handler);
+K_WORK_DEFINE(geo_work, geo_work_handler);
 
-void adc_timer_handler(struct k_timer *adc_dum)
+void geo_timer_handler(struct k_timer *geo_dum)
 {
     printk("ADC timer called\n");
-	k_work_submit(&adc_work);
+	k_work_submit(&geo_work);
 }
-K_TIMER_DEFINE(adc_timer, adc_timer_handler, NULL);
+K_TIMER_DEFINE(geo_timer, geo_timer_handler, NULL);
 
 //  ======== main ===============================================
 int8_t main(void)
