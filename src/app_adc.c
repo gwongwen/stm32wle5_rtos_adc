@@ -25,6 +25,7 @@ uint16_t app_adc_handler(void) {
 	int8_t err;
 	int32_t val_mv;
 
+	// getting STM32 ADC device at GPIO PB13
 	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
 		if (!device_is_ready(adc_channels[i].dev)) {
 			printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
@@ -38,6 +39,8 @@ uint16_t app_adc_handler(void) {
 		}
 	}
 
+	// initialization of channel and getting data
+	// resolution 12 bits: 0 to 4095 (uint16)
 	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
 
 		printk("- %s, channel %d: ",
@@ -46,11 +49,7 @@ uint16_t app_adc_handler(void) {
 
 		(void)adc_sequence_init_dt(&adc_channels[i], &adc_ch13_seq);
 		err = adc_read(adc_channels[i].dev, &adc_ch13_seq);
-		val_mv = (int32_t)m_sp_buf;
-		printk("%"PRId32, val_mv);
-
-		err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
-		printk(" = %"PRId32" mV\n", val_mv);
+		printk("adc: %d\n", m_sp_buf);
 	}
 	return m_sp_buf;
 }
