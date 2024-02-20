@@ -9,21 +9,22 @@
 
 //  ======== globals ============================================
 uint8_t dev_eui[] = LORAWAN_DEV_EUI;
-int32_t times = 12345;
+int32_t times = 1678984720;;
 
-struct eeprom_data {
-	uint8_t id;
+struct rom_data {
+	uint8_t *id;
 	int32_t timestamp;
 	uint16_t val;
 };
 
-int8_t rom_isr_rd_ind;		// index used by Interrupt Service Routine
-int8_t rom_isr_wrt_ind;		// index used by Interrupt Service Routine
+int8_t ind;		// index used by Interrupt Service Routine
 
 //  ======== app_rom_init =========================================
  int8_t app_rom_init(const struct device *dev)
  {
-    size_t eeprom_size;
+    int8_t ret;;
+
+	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
     if (dev = NULL) {
@@ -33,54 +34,77 @@ int8_t rom_isr_wrt_ind;		// index used by Interrupt Service Routine
     if (!device_is_ready(dev)) {
 		printk("eeprom is not ready. error: %d\n", dev);
 		return 0;
+	} else {
+        printk("- found device \"%s\", writing/reading data\n", dev->name);
+    }
+
+	// erasing 1 page at @0x00
+	ret  = flash_erase(dev, ROM_OFFSET, 512*ROM_PAGE_SIZE);
+	if (ret) {
+		printk("error erasing flash. error: %d\n", ret);
+	} else {
+		printk("erased all pages\n");
 	}
-
-	eeprom_size = eeprom_get_size(dev);
-	printk("eeprom size: %zu\n", eeprom_size);
-
-	rom_isr_rd_ind = 0;
-	rom_isr_wrt_ind = 0;
+	ind = 0;	// initialisation of isr index
 	return 0;
 }
 
 //  ======== app_rom_write ========================================
-int8_t app_rom_write(const struct device *dev, uint16_t adc_val_c)
+int8_t app_rom_write(const struct device *dev, uint16_t data)
 {
 	int8_t ret;
-	struct eeprom_data data;
-
-	data.id = dev_eui;
-	data.timestamp = times;
-	data.val = adc_val_c;
-
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
-	if (rom_isr_wrt_ind < ADC_BUFFER_SYZE) {
-		ret = eeprom_write(dev, EEPROM_SAMPLE_OFFSET+(rom_isr_wrt_ind*136), &data, sizeof(data));
-		if (ret  < 0){
-				printk("couldn't write eeprom. error: %d\n", ret);
-			}
-		} else {
-			rom_isr_wrt_ind =0 ;
-		}
+	// writing data in the first page of 2kbytes
+	ret = flash_write(dev, ROM_OFFSET, data, sizeof(data));
+	if (ret) {
+		printk("error writing data. error: %d\n", ret);
+	} else {
+		printk("wrote %zu bytes to address 0x0003f000\n", sizeof(data));
+	}
 	return 0;
 }
 
 //  ======== app_rom_read =========================================
-uint16_t app_rom_read(const struct device *dev)
+int8_t app_rom_read(const struct device *dev)
 {
 	int8_t ret;
-	uint16_t data;
-
+	struct rom_data data[ROM_STRUCT_SIZE];
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
-	if (rom_isr_rd_ind < ADC_BUFFER_SYZE) {
-		ret = eeprom_read(dev, EEPROM_SAMPLE_OFFSET+rom_isr_rd_ind , &data, sizeof(data));
-		if (ret  < 0){
-			printk("couldn't read eeprom. error: %d\n", ret);
-		}
+	// reading the first page
+	ret = flash_read(dev, ROM_OFFSET, data, sizeof(data));
+	if (ret) {
+		printk("error reading data.. error: %d\n", ret);
 	} else {
-		rom_isr_rd_ind = 0;
+		printk("read %zu bytes from address 0x00\n", sizeof(data));
 	}
-	return data;
+	// printing data
+	for (int8_t i = 0; i < ROM_STRUCT_SIZE; i++) {
+		printk("val: %d\n", data[i].val);
+	}
+	return 0;
+}
+
+//  ======== app_rom_handler =======================================
+int8_t app_rom_handler(const struct device *dev)
+{
+	int8_t ret;
+	struct rom_data data[ROM_BUFFER_SIZE];
+	uint16_t adc_val;
+	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
+
+	// putting 5 structures in fisrt page for this test
+	if (ind < ROM_STRUCT_SIZE) {
+		data[ind].id = dev_eui;
+		data[ind].timestamp = times;
+		data[ind].val = app_adc_get_val();
+		ind++;
+	} else {
+		app_rom_write(dev, data);
+		k_sleep(K_MSEC(2000));
+		app_rom_read(dev);
+		ind = 0;
+	}
+	return 0;
 }

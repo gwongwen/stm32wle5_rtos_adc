@@ -20,7 +20,7 @@ struct adc_sequence adc_ch13_seq = {
 };
 
 //  ======== app_adc_handler ====================================
-uint16_t app_adc_handler(void)
+uint16_t app_adc_get_val(void)
 {
 	int8_t err;
 
