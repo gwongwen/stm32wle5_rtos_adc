@@ -94,7 +94,7 @@ int8_t app_rom_handler(const struct device *dev)
 	uint16_t adc_val;
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
-	// putting 5 structures in fisrt page for this test
+	// putting 73 structures in fisrt page for this test
 	if (ind < ROM_STRUCT_SIZE) {
 		data[ind].id = dev_eui;
 		data[ind].timestamp = times;

@@ -16,8 +16,8 @@
 //  ======== defines ==============================================
 #define ROM_OFFSET              0x00
 #define ROM_PAGE_SIZE           1024
-#define ROM_BUFFER_SIZE         14    // 1 structure: ID+timestamp+value = 112 bytes
-#define ROM_STRUCT_SIZE         5     // number of structures to store
+#define ROM_BUFFER_SIZE         14   // 1 structure: ID+timestamp+value = 14 bytes
+#define ROM_STRUCT_SIZE         73   // number of structures to store per page
 #define LORAWAN_DEV_EUI		    { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x06, 0x21, 0xA5 }  // ID for test
                                             
 //  ======== prototypes ===========================================
