@@ -84,7 +84,7 @@ int8_t app_rom_read(const struct device *dev)
 	// reading the first page
 	ret = flash_read(dev, ROM_OFFSET, data, sizeof(data));
 	if (ret) {
-		printk("error reading data.. error: %d\n", ret);
+		printk("error reading data. error: %d\n", ret);
 	} else {
 		printk("read %zu bytes from address 0x00\n", sizeof(data));
 	}
