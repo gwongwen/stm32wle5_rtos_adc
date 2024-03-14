@@ -20,39 +20,46 @@ struct rom_data {
 int8_t ind;		// index used by Interrupt Service Routine
 
 //  ======== app_rom_init =========================================
- int8_t app_rom_init(const struct device *dev)
- {
-    int8_t ret;;
+int8_t app_rom_init(const struct device *dev)
+{
+	int8_t ret;
+	ssize_t size;
 
 	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
-    if (dev = NULL) {
+    if (dev == NULL) {
 		printk("no eeprom device found. error: %d\n", dev);
 		return 0;
 	}
-    if (!device_is_ready(dev)) {
-		printk("eeprom is not ready. error: %d\n", dev);
+	
+   if (!device_is_ready(dev)) {
+		printk("eeprom is not ready\n");
 		return 0;
 	} else {
         printk("- found device \"%s\", writing/reading data\n", dev->name);
     }
-
+	
 	// erasing 1 page at @0x00
-	ret  = flash_erase(dev, ROM_OFFSET, 512*ROM_PAGE_SIZE);
+	ret  = flash_erase(dev, ROM_OFFSET, 2*512*ROM_PAGE_SIZE);
 	if (ret) {
 		printk("error erasing flash. error: %d\n", ret);
 	} else {
 		printk("erased all pages\n");
 	}
+
+	size = eeprom_get_size(dev);
+	printk("using eeprom with size of: %zu.\n", size);
 	ind = 0;	// initialisation of isr index
 	return 0;
 }
 
 //  ======== app_rom_write ========================================
-int8_t app_rom_write(const struct device *dev, uint16_t data)
+int8_t app_rom_write(const struct device *dev, void *data)
 {
 	int8_t ret;
+	
+	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	// writing data in the first page of 2kbytes
@@ -70,6 +77,8 @@ int8_t app_rom_read(const struct device *dev)
 {
 	int8_t ret;
 	struct rom_data data[ROM_STRUCT_SIZE];
+
+	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	// reading the first page
@@ -92,6 +101,8 @@ int8_t app_rom_handler(const struct device *dev)
 	int8_t ret;
 	struct rom_data data[ROM_BUFFER_SIZE];
 	uint16_t adc_val;
+
+	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	// putting 73 structures in fisrt page for this test
@@ -102,7 +113,6 @@ int8_t app_rom_handler(const struct device *dev)
 		ind++;
 	} else {
 		app_rom_write(dev, data);
-		k_sleep(K_MSEC(2000));
 		app_rom_read(dev);
 		ind = 0;
 	}
