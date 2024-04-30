@@ -34,7 +34,7 @@ int8_t main(void)
 
 	printk("ADC STM32 Example\nBoard: %s\n", CONFIG_BOARD);
 
-	k_timer_start(&geo_timer, K_SECONDS(5), K_SECONDS(5));
+	k_timer_start(&geo_timer, K_SECONDS(1), K_SECONDS(1));
 
 	return 0;
 }
