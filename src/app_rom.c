@@ -110,7 +110,7 @@ int8_t app_rom_handler(const struct device *dev)
 		ind++;
 	} else {
 		app_rom_write(dev, data);
-		k_sleep(K_MSEC(1000));
+		k_sleep(K_MSEC(500));
 		app_rom_read(dev);
 		ind = 0;
 	}
