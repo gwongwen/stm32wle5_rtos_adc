@@ -8,13 +8,6 @@
 #include "app_rom.h"
 
 //  ======== globals ============================================
-uint8_t dev_eui[] = LORAWAN_DEV_EUI;
-
-struct rom_data {
-	uint8_t *id;
-	uint16_t val;
-};
-
 int8_t ind;		// index used by Interrupt Service Routine
 
 //  ======== app_rom_init =========================================
@@ -45,7 +38,7 @@ int8_t app_rom_init(const struct device *dev)
 	} else {
 		printk("erased all pages\n");
 	}
-
+	
 	size = eeprom_get_size(dev);
 	printk("using eeprom with size of: %zu.\n", size);
 	ind = 0;	// initialisation of isr index
@@ -53,7 +46,7 @@ int8_t app_rom_init(const struct device *dev)
 }
 
 //  ======== app_rom_write ========================================
-int8_t app_rom_write(const struct device *dev, void *data)
+int8_t app_rom_write(const struct device *dev, uint16_t data[])
 {
 	int8_t ret;
 	
@@ -61,7 +54,7 @@ int8_t app_rom_write(const struct device *dev, void *data)
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	// writing data in the first page of 2kbytes
-	ret = flash_write(dev, ROM_OFFSET, data, sizeof(data));
+	ret = flash_write(dev, ROM_OFFSET, &data, sizeof(data));
 	if (ret) {
 		printk("error writing data. error: %d\n", ret);
 	} else {
@@ -74,21 +67,21 @@ int8_t app_rom_write(const struct device *dev, void *data)
 int8_t app_rom_read(const struct device *dev)
 {
 	int8_t ret;
-	struct rom_data data[ROM_BUFFER_SIZE];
+	uint16_t data[ROM_MAX_RECORDS];
 
 	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	// reading the first page
-	ret = flash_read(dev, ROM_OFFSET, data, sizeof(data));
+	ret = flash_read(dev, ROM_OFFSET, &data, sizeof(data));
 	if (ret) {
 		printk("error reading data. error: %d\n", ret);
 	} else {
 		printk("read %zu bytes from address 0x0003f000\n", sizeof(data));
 	}
 	// printing data
-	for (int8_t i = 0; i < ROM_STRUCT_SIZE; i++) {
-		printk("val: %d\n", data[i].val);
+	for (int8_t i = 0; i < ROM_MAX_RECORDS; i++) {
+		printk("val: %d\n", data[i]);
 	}
 	return 0;
 }
@@ -97,16 +90,14 @@ int8_t app_rom_read(const struct device *dev)
 int8_t app_rom_handler(const struct device *dev)
 {
 	int8_t ret;
-	struct rom_data data[ROM_BUFFER_SIZE];
-	uint16_t adc_val;
+	uint16_t data[ROM_MAX_RECORDS];
 
 	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	// putting 2 structures in fisrt page for this test
-	if (ind < ROM_STRUCT_SIZE) {
-		data[ind].id = dev_eui;
-		data[ind].val = app_adc_get_val();
+	if (ind < ROM_MAX_RECORDS) {
+		data[ind] = app_adc_get_val();
 		ind++;
 	} else {
 		app_rom_write(dev, data);
