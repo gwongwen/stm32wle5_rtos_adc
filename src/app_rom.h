@@ -19,7 +19,6 @@
 #define ROM_PAGE_SIZE           512
 #define ROM_MAX_RECORDS         3   // 1 structure: ID+value = 3 bytes
                                     // number of structures to store per page
-//#define LORAWAN_DEV_EUI		    { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x06, 0x21, 0xA5 }  // ID for test
                                             
 //  ======== prototypes ===========================================
 int8_t app_rom_init(const struct device *dev);
