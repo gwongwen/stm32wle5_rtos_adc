@@ -30,7 +30,7 @@ int8_t app_rom_init(const struct device *dev)
 	} else {
         printk("- found device \"%s\", writing/reading data\n", dev->name);
     }
-	
+		
 	// erasing 1 page at @0x00
 	ret  = flash_erase(dev, ROM_OFFSET, 2*512*ROM_PAGE_SIZE);
 	if (ret) {
@@ -80,8 +80,8 @@ int8_t app_rom_read(const struct device *dev)
 		printk("read %zu bytes from address 0x0003f000\n", sizeof(data));
 	}
 	// printing data
-	for (int8_t i = 0; i < ROM_MAX_RECORDS; i++) {
-		printk("val: %d\n", data[i]);
+	for (ind = 0; ind < ROM_MAX_RECORDS; ind++) {
+		printk("rom val: %d\n", data[ind]);
 	}
 	return 0;
 }
@@ -95,15 +95,14 @@ int8_t app_rom_handler(const struct device *dev)
 	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
-	// putting 2 structures in fisrt page for this test
-	if (ind < ROM_MAX_RECORDS) {
+	// putting n structures in fisrt page for this test
+	while (ind < ROM_MAX_RECORDS) {
 		data[ind] = app_adc_get_val();
 		ind++;
-	} else {
-		app_rom_write(dev, data);
-		k_sleep(K_MSEC(500));
-		app_rom_read(dev);
-		ind = 0;
 	}
+	app_rom_write(dev, data);
+//	k_sleep(K_MSEC(500));
+	app_rom_read(dev);
+	ind = 0;
 	return 0;
 }
