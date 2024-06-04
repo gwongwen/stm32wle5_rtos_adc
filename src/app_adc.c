@@ -30,6 +30,7 @@ uint16_t app_adc_get_val(void)
 			printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
 		return 0;
 		}
+		
 		// getting channel setup
 		err = adc_channel_setup_dt(&adc_channels[i]);
 		if (err < 0) {

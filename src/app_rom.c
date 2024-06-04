@@ -24,24 +24,27 @@ int8_t app_rom_init(const struct device *dev)
 		return 0;
 	}
 	
-   if (!device_is_ready(dev)) {
+	if (!device_is_ready(dev)) {
 		printk("eeprom is not ready\n");
 		return 0;
 	} else {
         printk("- found device \"%s\", writing/reading data\n", dev->name);
     }
 		
-	// erasing 1 page at @0x00
-	ret  = flash_erase(dev, ROM_OFFSET, 2*512*ROM_PAGE_SIZE);
+	// erasing all page at @0x00
+	ret  = flash_erase(dev, ROM_OFFSET, 1024*ROM_PAGE_SIZE);
 	if (ret) {
 		printk("error erasing flash. error: %d\n", ret);
 	} else {
 		printk("erased all pages\n");
 	}
 	
+	// checking allocated size
 	size = eeprom_get_size(dev);
 	printk("using eeprom with size of: %zu.\n", size);
-	ind = 0;	// initialisation of isr index
+
+	// initialisation of isr index
+	ind = 0;
 	return 0;
 }
 
@@ -59,6 +62,11 @@ int8_t app_rom_write(const struct device *dev, uint16_t data[])
 		printk("error writing data. error: %d\n", ret);
 	} else {
 		printk("wrote %zu bytes to address 0x0003f000\n", sizeof(data));
+	}
+
+	// printing data
+	for (ind = 0; ind < ROM_MAX_RECORDS; ind++) {
+		printk("wrt -> rom val: %d\n", data[ind]);
 	}
 	return 0;
 }
@@ -79,9 +87,10 @@ int8_t app_rom_read(const struct device *dev)
 	} else {
 		printk("read %zu bytes from address 0x0003f000\n", sizeof(data));
 	}
-	// printing data
+
+	// reading data
 	for (ind = 0; ind < ROM_MAX_RECORDS; ind++) {
-		printk("rom val: %d\n", data[ind]);
+		printk("rd -> rom val: %d\n", data[ind]);
 	}
 	return 0;
 }
@@ -100,9 +109,13 @@ int8_t app_rom_handler(const struct device *dev)
 		data[ind] = app_adc_get_val();
 		ind++;
 	}
+
+	// writing and reading stored data
 	app_rom_write(dev, data);
-//	k_sleep(K_MSEC(500));
 	app_rom_read(dev);
+
+	// cleaning data storage partition
+	(void)flash_erase(dev, ROM_OFFSET, 1024*ROM_PAGE_SIZE);
 	ind = 0;
 	return 0;
 }
