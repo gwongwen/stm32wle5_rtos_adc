@@ -58,10 +58,10 @@ int8_t app_rom_write(const struct device *dev, uint16_t data[])
 
 	// writing data in the first page of 2kbytes
 	ret = flash_write(dev, ROM_OFFSET, &data, sizeof(data));
-	if (ret) {
+	if (ret!=0) {
 		printk("error writing data. error: %d\n", ret);
 	} else {
-		printk("wrote %zu bytes to address 0x0003f000\n", sizeof(data));
+		printk("wrote %zu bytes to address 0x00\n", sizeof(data));
 	}
 
 	// printing data
@@ -85,7 +85,7 @@ int8_t app_rom_read(const struct device *dev)
 	if (ret) {
 		printk("error reading data. error: %d\n", ret);
 	} else {
-		printk("read %zu bytes from address 0x0003f000\n", sizeof(data));
+		printk("read %zu bytes from address 0x00\n", sizeof(data));
 	}
 
 	// reading data
