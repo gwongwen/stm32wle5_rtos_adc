@@ -39,10 +39,6 @@ int8_t app_rom_init(const struct device *dev)
 		printk("erased all pages\n");
 	}
 	
-	// checking allocated size
-	size = eeprom_get_size(dev);
-	printk("using eeprom with size of: %zu.\n", size);
-
 	// initialisation of isr index
 	ind = 0;
 	return 0;
@@ -66,7 +62,7 @@ int8_t app_rom_write(const struct device *dev, uint16_t data[])
 
 	// printing data
 	for (ind = 0; ind < ROM_MAX_RECORDS; ind++) {
-		printk("wrt -> rom val: %d\n", data[ind]);
+		printk("wrt -> rom val: %"PRIu16"\n", data[ind]);
 	}
 	return 0;
 }
@@ -90,7 +86,7 @@ int8_t app_rom_read(const struct device *dev)
 
 	// reading data
 	for (ind = 0; ind < ROM_MAX_RECORDS; ind++) {
-		printk("rd -> rom val: %d\n", data[ind]);
+		printk("rd -> rom val: %"PRIu16"\n", data[ind]);
 	}
 	return 0;
 }

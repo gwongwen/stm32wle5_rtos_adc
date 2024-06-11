@@ -47,7 +47,7 @@ uint16_t app_adc_get_val(void)
 
 		(void)adc_sequence_init_dt(&adc_channels[i], &adc_ch13_seq);
 		(void)adc_read(adc_channels[i].dev, &adc_ch13_seq);
-		printk("adc val: %d\n", sp_buf);
+		printk("adc val: %"PRIu16"\n", sp_buf);
 	}
 	return sp_buf;
 }
