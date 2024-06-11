@@ -11,6 +11,7 @@
 //  ======== includes =============================================
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
+#include <zephyr/drivers/eeprom.h>
 #include <zephyr/drivers/flash.h>
 
 //  ======== defines ==============================================
