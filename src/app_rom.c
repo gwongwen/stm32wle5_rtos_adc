@@ -38,13 +38,13 @@ int8_t app_rom_init(const struct device *dev)
 	} else {
 		printk("erased all pages\n");
 	}
-
+/*
 	block = flash_get_write_block_size(dev);
 	printk("block size: %zu", block);
 
 	page = flash_get_page_count(dev);
 	printk("block size: %zu", page);
-
+*/
 	// initialisation of isr index
 	ind = 0;
 	return 0;
@@ -55,11 +55,9 @@ int8_t app_rom_write(const struct device *dev, uint16_t data[])
 {
 	int8_t ret;
 	
-	// getting eeprom device
-	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
-
 	// writing data in the first page of 2kbytes
 	ret = flash_write(dev, ROM_OFFSET, &data, sizeof(data));
+
 	if (ret!=0) {
 		printk("error writing data. error: %d\n", ret);
 	} else {
@@ -78,9 +76,6 @@ int8_t app_rom_read(const struct device *dev)
 {
 	int8_t ret;
 	uint16_t data[ROM_MAX_RECORDS];
-
-	// getting eeprom device
-	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
 
 	// reading the first page
 	ret = flash_read(dev, ROM_OFFSET, &data, sizeof(data));

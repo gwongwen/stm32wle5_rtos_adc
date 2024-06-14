@@ -27,7 +27,7 @@ K_TIMER_DEFINE(geo_timer, geo_timer_handler, NULL);
 //  ======== main ===============================================
 int8_t main(void)
 {
-	const struct device *rom_dev = NULL;
+	const struct device *rom_dev;
 
 	// setup eeprom device
 	app_rom_init(rom_dev);
