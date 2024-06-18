@@ -1,4 +1,4 @@
-# Code for Sastress Project : test of STM32 ADC
+# Code for 6Sens Project : test of STM32 ADC
 
 ## Overview
 This first code allows us to convert a analog voltage to numeric value and adds processing to it :
