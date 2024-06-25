@@ -30,7 +30,7 @@ int8_t main(void)
 	const struct device *rom_dev;
 
 	// setup eeprom device
-	app_rom_init(rom_dev);
+//	app_rom_init(rom_dev);
 
 	printk("ADC STM32 Example\nBoard: %s\n", CONFIG_BOARD);
 
