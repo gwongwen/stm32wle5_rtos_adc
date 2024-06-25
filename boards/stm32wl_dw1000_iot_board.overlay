@@ -7,25 +7,24 @@
 
 /* configuration of ADC for geophone sensor */
 /* adjust channel number according to pinmux in board.dts */
-/* PB13 ADC_GSONE -> ADC_IN0, see datasheet Pinout Config pg 56/149 */
+/* PB13 ADC_GSONE -> ADC_IN0, see datasheet Pinout Config pg 57/149 */
 
 / {
 	zephyr,user {
-		io-channels = <&adc1 13 >;
+		io-channels = <&adc1 0>;
 	};
 };
 
 &adc1 {
 	#address-cells = <1>;
 	#size-cells = <0>;
-
-	channel@13 {
-		reg = <13>;
+	channel@0 {
+		reg = <0>;
 		zephyr,gain = "ADC_GAIN_1";
 		zephyr,reference = "ADC_REF_INTERNAL";
 		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
 		zephyr,resolution = <12>;
 	};
-/*	vref-mv = <3300>; */
+	vref-mv = <3300>;
 	status = "okay";
 };

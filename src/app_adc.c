@@ -23,6 +23,7 @@ struct adc_sequence adc_ch13_seq = {
 uint16_t app_adc_get_val(void)
 {
 	int8_t err;
+	int32_t val_mv;
 
 	// getting STM32 ADC device at GPIO PB13
 	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
@@ -48,6 +49,10 @@ uint16_t app_adc_get_val(void)
 		(void)adc_sequence_init_dt(&adc_channels[i], &adc_ch13_seq);
 		(void)adc_read(adc_channels[i].dev, &adc_ch13_seq);
 		printk("adc val: %"PRIu16"\n", sp_buf);
+
+		val_mv = (int32_t)sp_buf;
+		(void) adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
+		printk("adc mv: %"PRId32"\n", val_mv);
 	}
 	return sp_buf;
 }
