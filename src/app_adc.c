@@ -6,6 +6,7 @@
  */
 
 #include "app_adc.h"
+//#include "../drivers/stm32adc/adc_context.h"
 
 //  ======== globals ============================================
 uint16_t sp_buf;		
@@ -17,6 +18,7 @@ static const struct adc_dt_spec adc_channels[] = {
 struct adc_sequence adc_ch0_seq = {
 	.buffer 		= &sp_buf,
 	.buffer_size	= sizeof(sp_buf),
+	.calibrate 		= true,
 };
 
 //  ======== app_adc_get_val ====================================
@@ -45,13 +47,18 @@ uint16_t app_adc_get_val(void)
 	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
 
 	//	printk("- %s, channel %d: ", adc_channels[i].dev->name, adc_channels[i].channel_id);
-
+	//	adc_stm32_calib(adc_channels[i].dev);
 		(void)adc_sequence_init_dt(&adc_channels[i], &adc_ch0_seq);
+	//	(void)adc_stm32_read(adc_channels[i].dev, &adc_ch0_seq);
 		(void)adc_read(adc_channels[i].dev, &adc_ch0_seq);
 
-		val_mv = (int32_t)sp_buf;
-		(void) adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
-		printk("adc val: %"PRIu16" - adc mv: %"PRId32"\n", sp_buf, val_mv);
+		val_mv = (int32_t)(sp_buf);
+		err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
+		if (err < 0) {
+			printk("value in mV not available. error: %d", err);
+		} else {
+			printk("adc val: %"PRIu16" - adc mv: %"PRId32"\n", sp_buf, val_mv);
+		}
 	}
 	return sp_buf;
 }

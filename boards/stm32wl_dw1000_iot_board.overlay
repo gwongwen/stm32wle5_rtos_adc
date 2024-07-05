@@ -10,7 +10,7 @@
 /* PB13 ADC_GSONE -> ADC_IN0, see datasheet Pinout Config pg 57/149 */
 
 / {
-	zephyr,user {
+	zephyr,user {		
 		io-channels = <&adc1 0>;
 	};
 };
@@ -19,6 +19,7 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 	compatible = "st,stm32-adc";
+	vref-channel = <13>;
 	channel@0 {
 		reg = <0>;
 		zephyr,gain = "ADC_GAIN_1";
