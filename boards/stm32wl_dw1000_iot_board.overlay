@@ -8,7 +8,6 @@
 /* configuration of ADC for geophone sensor */
 /* adjust channel number according to pinmux in board.dts */
 /* PB13 ADC_GSONE -> ADC_IN0, see datasheet Pinout Config pg 57/149 */
-
 / {
 	zephyr,user {		
 		io-channels = <&adc1 0>;
