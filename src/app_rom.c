@@ -14,7 +14,7 @@ int8_t ind;		// index used by Interrupt Service Routine
 int8_t app_rom_init(const struct device *dev)
 {
 	int8_t ret;
-	ssize_t block, page;
+	ssize_t size;
 
 	// getting eeprom device
 	dev = DEVICE_DT_GET(DT_ALIAS(eeprom0));
@@ -30,22 +30,19 @@ int8_t app_rom_init(const struct device *dev)
 	} else {
         printk("- found device \"%s\", writing/reading data\n", dev->name);
     }
+
+	// getting size of eeprom in bytes
+	size = eeprom_get_size(dev);
+	printk("size of eeprom: %zu\n", size);
 		
 	// erasing all page at @0x00
 	ret  = flash_erase(dev, ROM_OFFSET, 1024*ROM_PAGE_SIZE);
 	if (ret!=0) {
 		printk("error erasing flash. error: %d\n", ret);
 	} else {
-		printk("erased all pages\n");
+		printk("erased all 1024 pages\n");
 	}
-
-	// getting information about eeprom
-//	block = flash_get_write_block_size(dev);
-//	printk("block size: %zu", block);
-
-//	page = flash_get_page_count(dev);
-//	printk("block size: %zu", page);
-
+	
 	// initialisation of isr index
 	ind = 0;
 	return 0;

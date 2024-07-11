@@ -12,6 +12,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/flash.h>
+#include <zephyr/drivers/eeprom.h>
 
 //  ======== defines ==============================================
 #define ROM_OFFSET              0x00

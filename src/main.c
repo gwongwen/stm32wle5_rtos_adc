@@ -38,9 +38,9 @@ int8_t main(void)
 	// beginning of interrupt subroutine
 //	k_timer_start(&geo_timer, K_NO_WAIT, K_MSEC(5000));
 
-	while(1) {
-		uint16_t val = app_adc_get_val();
-		k_sleep(K_MSEC(2000));
-	}
+//	while(1) {
+//		uint16_t val = app_adc_get_val();
+//		k_sleep(K_MSEC(2000));
+//	}
 	return 0;
 }
