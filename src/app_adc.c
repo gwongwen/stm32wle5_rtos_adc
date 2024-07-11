@@ -6,7 +6,6 @@
  */
 
 #include "app_adc.h"
-//#include "../drivers/stm32adc/adc_context.h"
 
 //  ======== globals ============================================
 uint16_t sp_buf;		

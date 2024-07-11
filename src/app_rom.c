@@ -40,11 +40,11 @@ int8_t app_rom_init(const struct device *dev)
 	}
 
 	// getting information about eeprom
-	block = flash_get_write_block_size(dev);
-	printk("block size: %zu", block);
+//	block = flash_get_write_block_size(dev);
+//	printk("block size: %zu", block);
 
-	page = flash_get_page_count(dev);
-	printk("block size: %zu", page);
+//	page = flash_get_page_count(dev);
+//	printk("block size: %zu", page);
 
 	// initialisation of isr index
 	ind = 0;
