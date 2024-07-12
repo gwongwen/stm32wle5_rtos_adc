@@ -36,7 +36,7 @@ int8_t main(void)
 	printk("ADC STM32 Example\nBoard: %s\n", CONFIG_BOARD);
 
 	// beginning of interrupt subroutine
-//	k_timer_start(&geo_timer, K_NO_WAIT, K_MSEC(5000));
+	k_timer_start(&geo_timer, K_NO_WAIT, K_MSEC(5000));
 
 //	while(1) {
 //		uint16_t val = app_adc_get_val();
