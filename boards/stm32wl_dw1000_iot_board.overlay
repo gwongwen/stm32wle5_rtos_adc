@@ -18,17 +18,14 @@
 &adc1 {
 	#address-cells = <1>;
 	#size-cells = <0>;
-	compatible = "st,stm32-adc"; 
-/*	vref-channel = <13>;  */
-/*	vbat-channel = <14>; */
-/*	vref-mv = <1215>; */
+	compatible = "st,stm32-adc";
+	vref-mv = <1100>;
 	channel@0 {
 		reg = <0>;
 		zephyr,gain = "ADC_GAIN_1";
-		zephyr,reference = "ADC_REF_VDD_1_3";
+		zephyr,reference = "ADC_REF_INTERNAL";
 		zephyr,acquisition-time = <ADC_ACQ_TIME_MAX>;
-		zephyr,resolution = <12>; 
-		zephyr,vref-mv = <1215>;
+		zephyr,resolution = <12>;
 	};
 	status = "okay";
 };

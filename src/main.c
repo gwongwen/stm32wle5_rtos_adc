@@ -29,7 +29,6 @@ K_TIMER_DEFINE(geo_timer, geo_timer_handler, NULL);
 int8_t main(void)
 {
 	const struct device *rom_dev;
-	const struct device *dev;
 
 	// setup eeprom device
 //	app_rom_init(rom_dev);
@@ -38,7 +37,6 @@ int8_t main(void)
 
 	// beginning of interrupt subroutine
 //	k_timer_start(&geo_timer, K_NO_WAIT, K_MSEC(5000));
-	dev = DEVICE_DT_GET_ONE(st_stm32_adc);
 	while(1) {
 		uint16_t val = app_adc_get_val();
 		k_sleep(K_MSEC(1000)); // for the test

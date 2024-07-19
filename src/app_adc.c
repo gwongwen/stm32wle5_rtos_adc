@@ -33,7 +33,7 @@ uint16_t app_adc_get_val(void)
 		return 0;
 		}
 		
-		// getting channel setup
+		// getting channel setup in devicetree
 		err = adc_channel_setup_dt(&adc_channels[i]);
 		if (err < 0) {
 			printk("could not setup channel 0. error: %d\n", err);
@@ -41,16 +41,13 @@ uint16_t app_adc_get_val(void)
 		}
 	}
 
-	// initialization of channel and getting data
-	// resolution 12 bits: 0 to 4095 (uint16)
 	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
-
-	//	printk("- %s, channel %d: ", adc_channels[i].dev->name, adc_channels[i].channel_id);
-	//	adc_stm32_calib(adc_channels[i].dev);
+		// initialization of channel and getting data
 		(void)adc_sequence_init_dt(&adc_channels[i], &adc_ch0_seq);
-	//	(void)adc_stm32_read(adc_channels[i].dev, &adc_ch0_seq);
-		(void)adc_read(adc_channels[i].dev, &adc_ch0_seq);
 
+		// getting value and printing numerical data
+		// resolution 12 bits: 0 to 4095 (uint16)
+		(void)adc_read(adc_channels[i].dev, &adc_ch0_seq);
 		val_mv = (int32_t)(sp_buf);
 		err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
 		if (err < 0) {
