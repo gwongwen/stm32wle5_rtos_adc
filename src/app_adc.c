@@ -6,6 +6,7 @@
  */
 
 #include "app_adc.h"
+#include "app_vref.h"
 
 //  ======== globals ============================================
 uint16_t sp_buf;		
@@ -21,10 +22,10 @@ struct adc_sequence adc_ch0_seq = {
 };
 
 //  ======== app_adc_get_val ====================================
-uint16_t app_adc_get_val(void)
+uint16_t app_adc_get_val(uint16_t val)
 {
 	int8_t err;
-	int32_t val_mv;
+	uint16_t val_mv, buf;
 
 	// getting STM32 ADC device at GPIO IN0 PB13
 	for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
@@ -48,13 +49,9 @@ uint16_t app_adc_get_val(void)
 		// getting value and printing numerical data
 		// resolution 12 bits: 0 to 4095 (uint16)
 		(void)adc_read(adc_channels[i].dev, &adc_ch0_seq);
-		val_mv = (int32_t)(sp_buf);
-		err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
-		if (err < 0) {
-			printk("value in mV not available. error: %d", err);
-		} else {
-			printk("adc val: %"PRIu16" - adc mv: %"PRId32"\n", sp_buf, val_mv);
-		}
+		buf = (sp_buf*val)/3300;
+		val_mv = (sp_buf*val)/4096;
+		printk("vdda: %"PRIu16" - sp_buf: %"PRIu16" - adc num: %"PRIu16" - adc mv: %"PRIu16"\n", val, sp_buf, buf, val_mv);
 	}
-	return sp_buf;
+	return buf;
 }

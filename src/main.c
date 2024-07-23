@@ -6,6 +6,7 @@
  */
  
 #include "app_adc.h"
+#include "app_vref.h"
 #include "app_rom.h"
 
 
@@ -28,17 +29,24 @@ K_TIMER_DEFINE(geo_timer, geo_timer_handler, NULL);
 //  ======== main ===============================================
 int8_t main(void)
 {
-	const struct device *rom_dev;
+	const struct device *rom_dev = NULL;
+	const struct device *vref_dev = NULL;
+	uint16_t vdda;
 
-	// setup eeprom device
-//	app_rom_init(rom_dev);
+	// setup all devices
+	app_rom_init(rom_dev);
+	app_stm32_vref_init(vref_dev);
 
 	printk("ADC STM32 Example\nBoard: %s\n", CONFIG_BOARD);
 
 	// beginning of interrupt subroutine
 //	k_timer_start(&geo_timer, K_NO_WAIT, K_MSEC(5000));
+	vref_dev = DEVICE_DT_GET_ONE(st_stm32_vref);
+	vdda = app_stm32_get_vref(vref_dev);
+
 	while(1) {
-		uint16_t val = app_adc_get_val();
+		uint16_t val = app_adc_get_val(vdda);
+
 		k_sleep(K_MSEC(1000)); // for the test
 	}
 	return 0;

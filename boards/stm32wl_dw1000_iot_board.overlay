@@ -5,6 +5,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/* VREF internal voltage monitoring */
+/* internal voltage reference of STM32, IN13 - see datasheet pp 42/149 */
+/* Vrefint = 1232mV max, see datasheet pp78/149 */
+/ {
+	stm32_vref: stm32vref {
+    	compatible = "st,stm32-vref";
+		io-channels = <&adc1 13>;
+		vrefint-cal-addr = <13>;
+		vrefint-cal-mv = <1232>;
+    	status = "okay";
+	};
+};
+
 /* configuration of ADC for geophone sensor */
 /* adjust channel number according to pinmux in board.dts */
 /* PB13 ADC_GSONE -> ADC_IN0, see datasheet Pinout Config pg 57/149 */
@@ -18,14 +31,13 @@
 &adc1 {
 	#address-cells = <1>;
 	#size-cells = <0>;
-	compatible = "st,stm32-adc";
-	vref-mv = <1100>;
+
 	channel@0 {
 		reg = <0>;
 		zephyr,gain = "ADC_GAIN_1";
 		zephyr,reference = "ADC_REF_INTERNAL";
 		zephyr,acquisition-time = <ADC_ACQ_TIME_MAX>;
 		zephyr,resolution = <12>;
+		zephyr,vref-mv = <1232>;
 	};
-	status = "okay";
 };
