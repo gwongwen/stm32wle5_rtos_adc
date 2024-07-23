@@ -31,7 +31,7 @@ int8_t main(void)
 {
 	const struct device *rom_dev = NULL;
 	const struct device *vref_dev = NULL;
-	uint16_t vdda;
+	uint16_t vref;
 
 	// setup all devices
 	app_rom_init(rom_dev);
@@ -42,11 +42,10 @@ int8_t main(void)
 	// beginning of interrupt subroutine
 //	k_timer_start(&geo_timer, K_NO_WAIT, K_MSEC(5000));
 	vref_dev = DEVICE_DT_GET_ONE(st_stm32_vref);
-	vdda = app_stm32_get_vref(vref_dev);
+	vref = app_stm32_get_vref(vref_dev);
 
 	while(1) {
-		uint16_t val = app_adc_get_val(vdda);
-
+		uint16_t val = app_adc_get_val(vref);
 		k_sleep(K_MSEC(1000)); // for the test
 	}
 	return 0;

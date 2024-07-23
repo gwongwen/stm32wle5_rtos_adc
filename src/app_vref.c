@@ -31,7 +31,7 @@ int8_t app_stm32_vref_init(const struct device *dev)
 uint16_t app_stm32_get_vref(const struct device *dev)
 {
     struct sensor_value vref;
-    uint16_t vref_uint16, vdda;
+    uint16_t vref_uint16;
     int8_t ret = 0;
 
     // fetching data
@@ -50,9 +50,7 @@ uint16_t app_stm32_get_vref(const struct device *dev)
 
     // reference level received and converted from channel get
     // resolution 12bits: 0 to 4095 (uint16)
-    // vrefint = 1.212V typ (see datasheet pp 78/149)
     vref_uint16 = (uint16_t)(sensor_value_to_milli(&vref));
-    vdda = (4096*1212)/vref_uint16;
-    printk("stm32 vdda: %"PRIu16"\n", vdda);
-    return vdda;
+    printk("stm32 vdda: %"PRIu16"\n", vref_uint16);
+    return vref_uint16;
 }

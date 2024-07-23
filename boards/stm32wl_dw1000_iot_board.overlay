@@ -6,8 +6,8 @@
  */
 
 /* VREF internal voltage monitoring */
-/* internal voltage reference of STM32, IN13 - see datasheet pp 42/149 */
-/* Vrefint = 1232mV max, see datasheet pp78/149 */
+/* internal voltage reference of STM32, IN13 - see datasheet pg 42/149 */
+/* Vrefint = 1232mV max - see datasheet pg 78/149, table 36 */
 / {
 	stm32_vref: stm32vref {
     	compatible = "st,stm32-vref";
@@ -31,13 +31,11 @@
 &adc1 {
 	#address-cells = <1>;
 	#size-cells = <0>;
-
 	channel@0 {
 		reg = <0>;
 		zephyr,gain = "ADC_GAIN_1";
 		zephyr,reference = "ADC_REF_INTERNAL";
 		zephyr,acquisition-time = <ADC_ACQ_TIME_MAX>;
 		zephyr,resolution = <12>;
-		zephyr,vref-mv = <1232>;
 	};
 };

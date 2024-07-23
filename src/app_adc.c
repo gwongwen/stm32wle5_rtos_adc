@@ -49,9 +49,9 @@ uint16_t app_adc_get_val(uint16_t val)
 		// getting value and printing numerical data
 		// resolution 12 bits: 0 to 4095 (uint16)
 		(void)adc_read(adc_channels[i].dev, &adc_ch0_seq);
-		buf = (sp_buf*val)/3300;
-		val_mv = (sp_buf*val)/4096;
-		printk("vdda: %"PRIu16" - sp_buf: %"PRIu16" - adc num: %"PRIu16" - adc mv: %"PRIu16"\n", val, sp_buf, buf, val_mv);
+		buf = (sp_buf*val)/4096;
+		val_mv = (sp_buf*val)/3300;
+		printk("buffer: %"PRIu16", adc num: %"PRIu16" - adc mv: %"PRIu16"\n", sp_buf, buf, val_mv);
 	}
 	return buf;
 }
